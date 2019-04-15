@@ -17,14 +17,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:listitem="@layout/food_recyclerview_item" />
+        tools:listitem="@layout/food_item" />
 
     <TextView
-        android:layout_marginBottom="-46dp"
         android:id="@+id/text_view_amount"
         style="@style/TextAppearance.AppCompat.Medium.Inverse"
         android:layout_width="match_parent"
         android:layout_height="46dp"
+        android:layout_marginBottom="-46dp"
         android:background="@color/colorPrimary"
         android:fillAfter="true"
         android:fillEnabled="true"

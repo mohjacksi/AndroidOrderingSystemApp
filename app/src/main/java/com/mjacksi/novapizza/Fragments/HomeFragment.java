@@ -34,9 +34,6 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 public class HomeFragment extends Fragment {
     FoodViewModel foodViewModel;
     private TextView amountTextView;
-    Animation slideUpAnimation;
-    Animation slideDownAnimation;
-    Animation bounceAnimation;
 
     Animation fadeInAnimation;
     Animation fadeOutAndroidAnimation;
@@ -96,10 +93,6 @@ public class HomeFragment extends Fragment {
         amountTextView = v.findViewById(R.id.text_view_amount);
 
         amountTextView.setVisibility(View.GONE);
-
-        slideUpAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_up_animation);
-        slideDownAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.slide_down_animation);
-        bounceAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.bounce_animation);
         fadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in_animation);
         fadeOutAndroidAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out_animation);
 
@@ -109,15 +102,14 @@ public class HomeFragment extends Fragment {
 
     private void setAmount(double totalAmount) {
         DecimalFormat df = new DecimalFormat("#.##");
-
-        Log.d(TAG, "setAmount: " + df.format(totalAmount));
         if(totalAmount == 0){
-            amountTextView.startAnimation(fadeOutAndroidAnimation);
+            if(amountTextView.getVisibility() == View.VISIBLE)
+                amountTextView.startAnimation(fadeOutAndroidAnimation);
             amountTextView.setVisibility(View.GONE);
-        }else{
-
-            amountTextView.setVisibility(View.VISIBLE);
+        }else {
+            if(amountTextView.getVisibility() == View.GONE)
             amountTextView.startAnimation(fadeInAnimation);
+                amountTextView.setVisibility(View.VISIBLE);
             amountTextView.setText("Total amount: $" + df.format(totalAmount));
         }
     }

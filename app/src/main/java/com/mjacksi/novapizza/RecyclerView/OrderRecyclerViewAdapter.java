@@ -1,11 +1,6 @@
 package com.mjacksi.novapizza.RecyclerView;
 
 import android.content.Context;
-
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,54 +16,49 @@ import com.mjacksi.novapizza.RoomDatabase.FoodRoom;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerViewAdapter.FoodViewHolder> {
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
+public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecyclerViewAdapter.FoodViewHolder>{
     List<FoodRoom> foodList = new ArrayList<>();
     List<Food> cloneFoodList = new ArrayList<>();
 
     Context context;
-    private OnItemClickListener listener;
+    private FoodRecyclerViewAdapter.OnItemClickListener listener;
 
 
-    public FoodRecyclerViewAdapter(Context context) {
+    public OrderRecyclerViewAdapter(Context context) {
         this.context = context;
     }
 
     @NonNull
     @Override
-    public FoodViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+    public OrderRecyclerViewAdapter.FoodViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
         View itemView = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.food_item, viewGroup, false);
-        FoodViewHolder holder = new FoodViewHolder(itemView);
+                .inflate(R.layout.order_item, viewGroup, false);
+        OrderRecyclerViewAdapter.FoodViewHolder holder = new OrderRecyclerViewAdapter.FoodViewHolder(itemView);
 
 
         return holder;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull FoodViewHolder holder, int i) {
+    public void onBindViewHolder(@NonNull OrderRecyclerViewAdapter.FoodViewHolder holder, int i) {
         FoodRoom currentFood = foodList.get(i);
         holder.name.setText(currentFood.getTitle());
-        holder.description.setText(currentFood.getDescription());
         holder.imageView.setImageResource(currentFood.getImage());
-        holder.price.setText("$" + String.valueOf(currentFood.getPrice()));
-        if (currentFood.getCount() > 0) { // add order to cart
-            holder.linearLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.card_bg_ordered));
-            holder.button.setText("Delete order");
-            holder.button.setBackgroundColor(ContextCompat.getColor(context, R.color.button_bg_ordered));
-            //holder.button.setTextColor(ContextCompat.getColor(context, R.color.card_bg_ordered));
-        } else { // delete order
-            holder.linearLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.card_bg_unordered));
-            holder.button.setText("Order Now");
-            holder.button.setBackgroundColor(ContextCompat.getColor(context, R.color.button_bg_order));
-            holder.button.setTextColor(ContextCompat.getColor(context, R.color.button_text_order));
-        }
+        holder.price.setText("x" + currentFood.getCount());
+
+
     }
 
     public class FoodViewHolder extends RecyclerView.ViewHolder {
         LinearLayout linearLayout;
-        TextView name, description, price;
+        TextView name, price;
         ImageView imageView;
+        ImageView inc_count, dec_count;
         Button button;
 
 
@@ -76,12 +66,14 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
             super(itemView);
             linearLayout = itemView.findViewById(R.id.linear_layout);
             name = itemView.findViewById(R.id.text_view_name);
-            description = itemView.findViewById(R.id.text_view_description);
             imageView = itemView.findViewById(R.id.image_view_food);
             button = itemView.findViewById(R.id.order_button);
             price = itemView.findViewById(R.id.text_view_price);
 
-            button.setOnClickListener(new View.OnClickListener() {
+            inc_count = itemView.findViewById(R.id.inc_count);
+            dec_count = itemView.findViewById(R.id.dec_count);
+
+            inc_count.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
@@ -90,6 +82,28 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
                     }
                 }
             });
+
+            dec_count.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    int position = getAdapterPosition();
+                    if (listener != null && position != RecyclerView.NO_POSITION) {
+                        listener.onItemClick(foodList.get(position), position);
+                    }
+                }
+            });
+
+
+
+//            button.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    int position = getAdapterPosition();
+//                    if (listener != null && position != RecyclerView.NO_POSITION) {
+//                        listener.onItemClick(foodList.get(position), position);
+//                    }
+//                }
+//            });
         }
     }
 
@@ -132,7 +146,7 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
 
     }
 
-    public void setOnItemClickListener(OnItemClickListener listener) {
+    public void setOnItemClickListener(FoodRecyclerViewAdapter.OnItemClickListener listener) {
         this.listener = listener;
     }
 
