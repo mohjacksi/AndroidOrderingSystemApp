@@ -1,22 +1,22 @@
 package com.mjacksi.novapizza.Models;
 
 public class Food {
-    String name;
+    String title;
     String description;
     double price;
     int count;
     int image;
 
-    public Food(String name, String description, double price, int image) {
-        this.name = name;
+    public Food(String title, String description, double price, int image) {
+        this.title = title;
         this.description = description;
         this.price = price;
         this.image = image;
         this.count = 0;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
     public String getDescription() {

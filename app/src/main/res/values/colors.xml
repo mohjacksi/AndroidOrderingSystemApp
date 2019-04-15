@@ -8,4 +8,9 @@
     <color name="gray">#9f9f9f</color>
     <color name="gray_lite">#649f9f9f</color>
     <color name="bg_gray">#e6e6e5</color>
+    <color name="button_bg_order">#F9A825</color>
+    <color name="button_bg_ordered">#80ADD7</color>
+    <color name="card_bg_ordered">#FFF6EA</color>
+    <color name="card_bg_unordered">#fff</color>
+    <color name="button_text_order">#fff</color>
 </resources>

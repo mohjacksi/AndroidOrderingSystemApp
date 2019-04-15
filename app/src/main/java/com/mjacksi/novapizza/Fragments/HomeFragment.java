@@ -2,26 +2,40 @@ package com.mjacksi.novapizza.Fragments;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.mjacksi.novapizza.R;
 import com.mjacksi.novapizza.RecyclerView.FoodRecyclerViewAdapter;
+import com.mjacksi.novapizza.RoomDatabase.FoodRoom;
+import com.mjacksi.novapizza.RoomDatabase.FoodViewModel;
+
+import java.util.List;
+
+import static androidx.constraintlayout.widget.Constraints.TAG;
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class HomeFragment extends Fragment {
-
+    FoodViewModel foodViewModel;
 
     public HomeFragment() {
         // Required empty public constructor
     }
 
+
+    int lastPosition = -1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,10 +43,37 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
-        FoodRecyclerViewAdapter adapter = new FoodRecyclerViewAdapter();
+        final FoodRecyclerViewAdapter adapter = new FoodRecyclerViewAdapter(getActivity());
         RecyclerView recyclerView = v.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+
+        foodViewModel = ViewModelProviders.of(HomeFragment.this).get(FoodViewModel.class);
+        foodViewModel.getAllFood().observe(HomeFragment.this, new Observer<List<FoodRoom>>() {
+            @Override
+            public void onChanged(@Nullable List<FoodRoom> foods) {
+                adapter.changeAt(foods,lastPosition);
+            }
+        });
+
+
+
+
+        adapter.setOnItemClickListener(new FoodRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(FoodRoom food, int position) {
+                if (food.getCount() == 0) {
+                    food.setCount(1);
+                    foodViewModel.update(food);
+                } else {
+                    food.setCount(0);
+                    foodViewModel.update(food);
+                }
+                lastPosition = position;
+            }
+        });
+
 
         return v;
     }
