@@ -31,6 +31,8 @@ import static androidx.constraintlayout.widget.Constraints.TAG;
 
 public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerViewAdapter.FoodViewHolder> {
     List<FoodRoom> foodList = new ArrayList<>();
+    List<Food> cloneFoodList = new ArrayList<>();
+
     Context context;
     private OnItemClickListener listener;
 
@@ -57,7 +59,7 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
         holder.name.setText(currentFood.getTitle());
         holder.description.setText(currentFood.getDescription());
         holder.imageView.setImageResource(currentFood.getImage());
-
+        holder.price.setText("$" + String.valueOf(currentFood.getPrice()));
         if (currentFood.getCount() > 0) { // add order to cart
             holder.linearLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.card_bg_ordered));
             holder.button.setText("Delete order");
@@ -73,7 +75,7 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
 
     public class FoodViewHolder extends RecyclerView.ViewHolder {
         LinearLayout linearLayout;
-        TextView name, description;
+        TextView name, description, price;
         ImageView imageView;
         Button button;
 
@@ -85,6 +87,7 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
             description = itemView.findViewById(R.id.text_view_description);
             imageView = itemView.findViewById(R.id.image_view_food);
             button = itemView.findViewById(R.id.order_button);
+            price = itemView.findViewById(R.id.text_view_price);
 
             button.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -105,15 +108,30 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
     }
 
 
-    List<Integer> oldCount = new ArrayList<>();
+    void cloneList(List<FoodRoom> newFoodList){
+        cloneFoodList.clear();
+        for (int i = 0; i < newFoodList.size() ; i++) {
+            FoodRoom current = newFoodList.get(i);
+            cloneFoodList.add(new Food(current.getCount()));
+        }
+    }
 
-    public void changeAt(List<FoodRoom> newFoodRooms, int position) {
-        this.foodList = newFoodRooms;
+    void checkDiff(){
+        if(cloneFoodList.size() == foodList.size()){
+            for (int i = 0; i < cloneFoodList.size(); i++) {
+                if (cloneFoodList.get(i).getCount() != foodList.get(i).getCount()){
+                    notifyItemChanged(i);
+                }
+            }
+        }
+    }
 
-        if (position != -1)
-            notifyItemChanged(position);
-        else
+    public void changeAt(List<FoodRoom> newFoodRooms) {
+        if (cloneFoodList.size() == 0)
             notifyDataSetChanged();
+        this.foodList = newFoodRooms;
+        checkDiff();
+        cloneList(newFoodRooms);
     }
 
 

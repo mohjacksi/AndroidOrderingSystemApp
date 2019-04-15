@@ -15,6 +15,11 @@ public class Food {
         this.count = 0;
     }
 
+
+    public Food(int count) {
+        this.count = count;
+    }
+
     public String getTitle() {
         return title;
     }

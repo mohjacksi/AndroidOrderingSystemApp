@@ -19,6 +19,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.mjacksi.novapizza.Fragments.HomeFragment;
 import com.mjacksi.novapizza.RoomDatabase.FoodViewModel;
@@ -66,9 +67,11 @@ public class MainActivity extends AppCompatActivity
                     fab.hide();
                 }else{
                     fab.show();
+
                 }
             }
         });
+
     }
 
     @Override
