@@ -40,7 +40,7 @@
             <item
                 android:id="@+id/login"
                 android:icon="@drawable/ic_input"
-                android:title="Login" />
+                android:title="Sign up | Login" />
 
             <item
                 android:id="@+id/logout"

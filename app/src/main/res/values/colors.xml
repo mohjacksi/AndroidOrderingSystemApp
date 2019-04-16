@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3f4d50</color>
+    <color name="colorPrimary">#334B50</color>
     <color name="colorPrimaryDark">#2f383a</color>
     <color name="colorAccent">#f39225</color>
     <color name="black">#000000</color>
@@ -9,7 +9,7 @@
     <color name="gray_lite">#649f9f9f</color>
     <color name="bg_gray">#e6e6e5</color>
     <color name="button_bg_order">#F9A825</color>
-    <color name="button_bg_ordered">#80ADD7</color>
+    <color name="button_bg_ordered">#6699C8</color>
     <color name="card_bg_ordered">#FFF6EA</color>
     <color name="card_bg_unordered">#fff</color>
     <color name="button_text_order">#fff</color>

@@ -9,13 +9,20 @@
     android:layout_marginEnd="8dp">
 
     <LinearLayout
-        android:id="@+id/linear_layout"
+        android:id="@+id/linear_layout_root"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="8dp">
+        android:orientation="vertical">
 
-
+        <LinearLayout
+            android:id="@+id/linear_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="8dp"
+            android:paddingTop="8dp"
+            android:paddingRight="8dp"
+            android:paddingBottom="4dp">
 
 
             <LinearLayout
@@ -24,16 +31,17 @@
                 android:orientation="horizontal">
 
                 <TextView
-                    android:layout_weight="1"
-
                     android:id="@+id/text_view_name"
+
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_weight="1"
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="Name"
                     android:textAppearance="@style/TextAppearance.AppCompat.Large"
                     android:textColor="@color/colorAccent" />
+
                 <TextView
                     android:id="@+id/text_view_price"
                     android:layout_width="match_parent"
@@ -49,39 +57,41 @@
             </LinearLayout>
 
 
+            <TextView
+                android:id="@+id/text_view_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Description"
+                android:textColor="@color/colorPrimary" />
 
+            <ImageView
+                android:id="@+id/image_view_food"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginTop="6dp"
+                android:scaleType="centerCrop"
+                app:srcCompat="@drawable/californiapizza"
+                tools:srcCompat="@drawable/detroitpizza" />
 
-        <TextView
-            android:id="@+id/text_view_description"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Description"
-            android:textColor="@color/colorPrimary" />
-
-        <ImageView
-            android:id="@+id/image_view_food"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="6dp"
-            android:scaleType="centerCrop"
-            app:srcCompat="@drawable/californiapizza"
-            tools:srcCompat="@drawable/detroitpizza" />
-
-        <!--<Button-->
+            <!--<Button-->
             <!--android:layout_width="match_parent"-->
             <!--android:layout_height="wrap_content"-->
             <!--android:text="ORDER"-->
             <!--android:textColor="@android:color/white" />-->
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@android:color/white"/>
+            <!--<View-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="2dp"-->
+            <!--android:background="@android:color/white"/>-->
+        </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/order_button"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginBottom="8dp"
             android:background="@color/button_bg_order"
             android:gravity="center"
             android:text="Order Now"

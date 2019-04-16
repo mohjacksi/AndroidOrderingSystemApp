@@ -73,19 +73,19 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical">
-
-        <ImageView
-            android:id="@+id/dec_count"
-            android:layout_weight="1"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/ic_indeterminate_check_box"/>
         <ImageView
             android:id="@+id/inc_count"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:src="@drawable/ic_add_box"/>
+            android:src="@drawable/ic_add_box" />
+        <ImageView
+            android:id="@+id/dec_count"
+            android:layout_weight="1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/ic_indeterminate_check_box" />
+
     </LinearLayout>
 
     </LinearLayout>

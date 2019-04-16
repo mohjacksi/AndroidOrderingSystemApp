@@ -41,5 +41,14 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:$lifecycle_version"
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     // For Kotlin use kapt instead of annotationProcessor
-    
+
+    //Firebase
+    implementation 'com.google.firebase:firebase-core:16.0.8'
+    implementation 'com.google.firebase:firebase-auth:16.2.1'
+    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
+
 }
+
+apply plugin: 'com.google.gms.google-services'
+
+com.google.gms.googleservices.GoogleServicesPlugin.config.disableVersionCheck = true
