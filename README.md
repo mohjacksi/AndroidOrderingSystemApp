@@ -5,12 +5,12 @@ An android application let you to receive orders from your clients as you are a 
 Implemented by FirebaseAuth, Prebuilt-UI library
 I used just phone number to be a user in the system.
 
-https://github.com/mohjacksi/AndroidOrderingSystemApp/blob/master/images/1.png
+![alt text](https://github.com/mohjacksi/AndroidOrderingSystemApp/blob/master/images/1.png)
 
-https://github.com/mohjacksi/AndroidOrderingSystemApp/blob/master/images/2.png
+![alt text](https://github.com/mohjacksi/AndroidOrderingSystemApp/blob/master/images/2.png)
 
-https://github.com/mohjacksi/AndroidOrderingSystemApp/blob/master/images/3.png
+![alt text](https://github.com/mohjacksi/AndroidOrderingSystemApp/blob/master/images/3.png)
 
-https://github.com/mohjacksi/AndroidOrderingSystemApp/blob/master/images/4.png
+![alt text](https://github.com/mohjacksi/AndroidOrderingSystemApp/blob/master/images/4.png)
 
-https://github.com/mohjacksi/AndroidOrderingSystemApp/blob/master/images/5.png
+![alt text](https://github.com/mohjacksi/AndroidOrderingSystemApp/blob/master/images/5.png)
