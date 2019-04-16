@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -24,6 +25,7 @@ import java.text.DecimalFormat;
 import java.util.List;
 
 public class OrderActivity extends AppCompatActivity {
+    private static final String TAG = OrderActivity.class.getSimpleName();
     FoodViewModel foodViewModel;
     private TextView amountTextView;
 
@@ -56,6 +58,8 @@ public class OrderActivity extends AppCompatActivity {
         foodViewModel.getAllOrderedFood().observe(this, new Observer<List<FoodRoom>>() {
             @Override
             public void onChanged(@Nullable List<FoodRoom> foods) {
+                if (foods.size() == 0) finish();
+
                 adapter.changeAt(foods);
 
                 double totalAmount = 0;
@@ -69,6 +73,24 @@ public class OrderActivity extends AppCompatActivity {
         });
 
         amountTextView = findViewById(R.id.text_view_order_amount);
+
+
+
+        adapter.setOnItemClickListenerInc(new FoodRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(FoodRoom food, int position) {
+                food.setCount(food.getCount()+1);
+                foodViewModel.update(food);
+            }
+        });
+
+        adapter.setOnItemClickListenerDec(new FoodRecyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(FoodRoom food, int position) {
+                food.setCount(food.getCount()-1);
+                foodViewModel.update(food);
+            }
+        });
     }
 
 

@@ -25,7 +25,8 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
     List<Food> cloneFoodList = new ArrayList<>();
 
     Context context;
-    private FoodRecyclerViewAdapter.OnItemClickListener listener;
+    private FoodRecyclerViewAdapter.OnItemClickListener listenerInc;
+    private FoodRecyclerViewAdapter.OnItemClickListener listenerDec;
 
 
     public OrderRecyclerViewAdapter(Context context) {
@@ -50,13 +51,13 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
         holder.name.setText(currentFood.getTitle());
         holder.imageView.setImageResource(currentFood.getImage());
         holder.price.setText("x" + currentFood.getCount());
-
+        holder.total.setText("$" + currentFood.getCount() * currentFood.getPrice());
 
     }
 
     public class FoodViewHolder extends RecyclerView.ViewHolder {
         LinearLayout linearLayout;
-        TextView name, price;
+        TextView name, price, total;
         ImageView imageView;
         ImageView inc_count, dec_count;
         Button button;
@@ -66,6 +67,7 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
             super(itemView);
             linearLayout = itemView.findViewById(R.id.linear_layout);
             name = itemView.findViewById(R.id.text_view_name);
+            total = itemView.findViewById(R.id.text_view_total);
             imageView = itemView.findViewById(R.id.image_view_food);
             button = itemView.findViewById(R.id.order_button);
             price = itemView.findViewById(R.id.text_view_price);
@@ -77,8 +79,8 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    if (listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(foodList.get(position), position);
+                    if (listenerInc != null && position != RecyclerView.NO_POSITION) {
+                        listenerInc.onItemClick(foodList.get(position), position);
                     }
                 }
             });
@@ -87,8 +89,9 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
                 @Override
                 public void onClick(View v) {
                     int position = getAdapterPosition();
-                    if (listener != null && position != RecyclerView.NO_POSITION) {
-                        listener.onItemClick(foodList.get(position), position);
+                    if (listenerDec != null && position != RecyclerView.NO_POSITION) {
+                        listenerDec.onItemClick(foodList.get(position), position);
+
                     }
                 }
             });
@@ -129,12 +132,14 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
                     notifyItemChanged(i);
                 }
             }
+        }else{
+            notifyDataSetChanged();
         }
     }
 
     public void changeAt(List<FoodRoom> newFoodRooms) {
-        if (cloneFoodList.size() == 0)
-            notifyDataSetChanged();
+//        if (cloneFoodList.size() == 0)
+//            notifyDataSetChanged();
         this.foodList = newFoodRooms;
         checkDiff();
         cloneList(newFoodRooms);
@@ -143,11 +148,13 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
 
     public interface OnItemClickListener {
         void onItemClick(FoodRoom food, int position);
-
     }
 
-    public void setOnItemClickListener(FoodRecyclerViewAdapter.OnItemClickListener listener) {
-        this.listener = listener;
+    public void setOnItemClickListenerInc(FoodRecyclerViewAdapter.OnItemClickListener listener) {
+        this.listenerInc = listener;
+    }
+    public void setOnItemClickListenerDec(FoodRecyclerViewAdapter.OnItemClickListener listener) {
+        this.listenerDec = listener;
     }
 
 }
