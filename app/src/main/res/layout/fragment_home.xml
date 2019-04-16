@@ -23,7 +23,7 @@
         android:id="@+id/text_view_amount"
         style="@style/TextAppearance.AppCompat.Medium.Inverse"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="64dp"
         android:layout_marginBottom="-46dp"
         android:background="@color/colorPrimary"
         android:fillAfter="true"

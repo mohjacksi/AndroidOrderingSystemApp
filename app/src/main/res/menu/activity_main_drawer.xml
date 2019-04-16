@@ -36,6 +36,16 @@
                 android:id="@+id/nav_send"
                 android:icon="@drawable/ic_menu_send"
                 android:title="Send" />
+
+            <item
+                android:id="@+id/login"
+                android:icon="@drawable/ic_input"
+                android:title="Login" />
+
+            <item
+                android:id="@+id/logout"
+                android:icon="@drawable/ic_input"
+                android:title="Logout" />
         </menu>
     </item>
 

@@ -41,6 +41,5 @@ dependencies {
     annotationProcessor "android.arch.lifecycle:compiler:$lifecycle_version"
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     // For Kotlin use kapt instead of annotationProcessor
-
-
+    
 }

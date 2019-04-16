@@ -49,6 +49,9 @@ public class MainActivity extends AppCompatActivity
         });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        hideLogoutLogout();
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -67,11 +70,10 @@ public class MainActivity extends AppCompatActivity
         foodViewModel.getCount().observe(MainActivity.this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer integer) {
-                if (integer == 0) {
-                    fab.hide();
-                }else{
+                if (integer != null && integer != 0) {
                     fab.show();
-
+                }else{
+                    fab.hide();
                 }
             }
         });
@@ -133,10 +135,24 @@ public class MainActivity extends AppCompatActivity
 
         } else if (id == R.id.nav_send) {
 
+        } else if (id == R.id.login) {
+
+        } else if (id == R.id.logout) {
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    NavigationView navigationView;
+    private void hideLogoutLogout()
+    {
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        Menu nav_Menu = navigationView.getMenu();
+
+        // TODO: if user logged in then hide logout and show sign out
+        nav_Menu.findItem(R.id.logout).setVisible(false);
     }
 }

@@ -115,12 +115,12 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
                     notifyItemChanged(i);
                 }
             }
+        }else{
+            notifyDataSetChanged();
         }
     }
 
     public void changeAt(List<FoodRoom> newFoodRooms) {
-        if (cloneFoodList.size() == 0)
-            notifyDataSetChanged();
         this.foodList = newFoodRooms;
         checkDiff();
         cloneList(newFoodRooms);

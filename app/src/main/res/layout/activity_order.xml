@@ -24,19 +24,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_done"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:srcCompat="@drawable/ic_done"
-        tools:ignore="VectorDrawableCompat" />
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/order_recyclerview"
         android:layout_width="0dp"
@@ -51,7 +38,7 @@
         android:id="@+id/text_view_order_amount"
         style="@style/TextAppearance.AppCompat.Medium.Inverse"
         android:layout_width="match_parent"
-        android:layout_height="46dp"
+        android:layout_height="64dp"
         android:background="@color/colorPrimary"
         android:fillAfter="true"
         android:fillEnabled="true"
@@ -61,6 +48,20 @@
         android:textColor="@color/card_bg_unordered"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/order_recyclerview" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab_done"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintBottom_toTopOf="@+id/text_view_order_amount"
+        app:layout_constraintEnd_toEndOf="@+id/text_view_order_amount"
+        app:layout_constraintTop_toBottomOf="@+id/text_view_order_amount"
+        app:srcCompat="@drawable/ic_done"
+        tools:ignore="VectorDrawableCompat" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

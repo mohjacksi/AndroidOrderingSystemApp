@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "400014812009",
+    "firebase_url": "https://orderapp-c1293.firebaseio.com",
+    "project_id": "orderapp-c1293",
+    "storage_bucket": "orderapp-c1293.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:400014812009:android:bff3f868bd29d3a8",
+        "android_client_info": {
+          "package_name": "com.mjacksi.novapizza"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "400014812009-mvulc2ajrsgk3ullb4f36qbg7mdg8nnb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.mjacksi.novapizza",
+            "certificate_hash": "c5a2975985a015373b32ab7a7e07615a6f07acce"
+          }
+        },
+        {
+          "client_id": "400014812009-sp1g3r0sv6760a9pbc90877dk9f00t5i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA9WLm6Su_EymLnN5H6Rjp84KOL8dRTxrE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "400014812009-sp1g3r0sv6760a9pbc90877dk9f00t5i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
