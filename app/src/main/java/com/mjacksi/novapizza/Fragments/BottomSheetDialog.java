@@ -1,5 +1,6 @@
 package com.mjacksi.novapizza.Fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,8 +15,7 @@ import androidx.annotation.Nullable;
 
 public class BottomSheetDialog extends BottomSheetDialogFragment {
 
-    String totalAmount = "";
-    String address = "";
+    SheetListener listener;
 
     public BottomSheetDialog() {
     }
@@ -37,11 +37,26 @@ public class BottomSheetDialog extends BottomSheetDialogFragment {
         submitOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                listener.onButtonClicked();
+                dismiss();
             }
         });
 
         return v;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        try {
+            listener = (SheetListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(context.toString() + " should implement the SheetListener interface");
+        }
+    }
+
+    public interface SheetListener {
+        void onButtonClicked();
+    }
 }

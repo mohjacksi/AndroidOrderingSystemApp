@@ -21,7 +21,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
-public class PlaceOrderActivity extends AppCompatActivity {
+public class PlaceOrderActivity extends AppCompatActivity implements BottomSheetDialog.SheetListener {
 
     FoodViewModel foodViewModel;
     TextView totalOrderAmount;
@@ -95,5 +95,13 @@ public class PlaceOrderActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, "Plase enter your address", Toast.LENGTH_LONG).show();
         }
+    }
+
+    @Override
+    public void onButtonClicked() {
+        Toast.makeText(this, "Your order placed", Toast.LENGTH_SHORT).show();
+        foodViewModel.resetAllOrders();
+
+        finish();
     }
 }
