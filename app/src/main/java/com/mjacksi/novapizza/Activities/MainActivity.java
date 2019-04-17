@@ -14,7 +14,10 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
+import com.mjacksi.novapizza.BuildConfig;
 import com.mjacksi.novapizza.Fragments.HomeFragment;
+import com.mjacksi.novapizza.Fragments.MyOrdersFragment;
 import com.mjacksi.novapizza.R;
 import com.mjacksi.novapizza.RoomDatabase.FoodViewModel;
 
@@ -43,6 +46,9 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
@@ -50,8 +56,6 @@ public class MainActivity extends AppCompatActivity
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                //        .setAction("Action", null).show();
                 Intent intent = new Intent(MainActivity.this, OrderActivity.class);
                 startActivity(intent);
             }
@@ -119,12 +123,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_reset_all_orders) {
             foodViewModel.resetAllOrders();
             return true;
@@ -143,18 +143,21 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_home) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new HomeFragment()).commit();
-        } else if (id == R.id.nav_camera) {
-            // Handle the camera action
-        } else if (id == R.id.nav_gallery) {
-
-        } else if (id == R.id.nav_slideshow) {
-
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.nav_orders) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new MyOrdersFragment()).commit();
         } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
+            try {
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, "NovaPizza");
+                String shareMessage = "\nOrder a delicious meals from NovaPizza app\n";
+                shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + BuildConfig.APPLICATION_ID + "\n\n";
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+                startActivity(Intent.createChooser(shareIntent, "choose one"));
+            } catch (Exception e) {
+                //e.toString();
+            }
         } else if (id == R.id.login) {
             signIn();
         } else if (id == R.id.logout) {
@@ -176,10 +179,12 @@ public class MainActivity extends AppCompatActivity
         if (currentUser == null) {
             nav_Menu.findItem(R.id.logout).setVisible(false);
             nav_Menu.findItem(R.id.login).setVisible(true);
+            nav_Menu.findItem(R.id.nav_orders).setVisible(false);
             nameNumberHeader.setText("Login to be able to order staff!");
         } else {
             nav_Menu.findItem(R.id.logout).setVisible(true);
             nav_Menu.findItem(R.id.login).setVisible(false);
+            nav_Menu.findItem(R.id.nav_orders).setVisible(true);
             nameNumberHeader.setText(String.valueOf(currentUser.getPhoneNumber()));
         }
     }

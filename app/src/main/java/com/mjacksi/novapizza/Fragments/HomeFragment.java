@@ -38,7 +38,7 @@ public class HomeFragment extends Fragment {
         // Required empty public constructor
     }
 
-
+    FoodRecyclerViewAdapter adapter;
     int lastPosition = -1;
 
     @Override
@@ -47,7 +47,7 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_home, container, false);
 
-        final FoodRecyclerViewAdapter adapter = new FoodRecyclerViewAdapter(getActivity());
+        adapter = new FoodRecyclerViewAdapter(getActivity());
         RecyclerView recyclerView = v.findViewById(R.id.recycler_view);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

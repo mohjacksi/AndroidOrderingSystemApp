@@ -7,13 +7,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.mjacksi.novapizza.Fragments.BottomSheetDialog;
+import com.mjacksi.novapizza.Models.FirebaseOrder;
 import com.mjacksi.novapizza.R;
 import com.mjacksi.novapizza.RoomDatabase.FoodRoom;
 import com.mjacksi.novapizza.RoomDatabase.FoodViewModel;
+import com.mjacksi.novapizza.Util.InternetConnection;
 
 import java.text.DecimalFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,14 +31,26 @@ import androidx.lifecycle.ViewModelProviders;
 
 public class PlaceOrderActivity extends AppCompatActivity implements BottomSheetDialog.SheetListener {
 
+    private static final String CLASS_TAG = PlaceOrderActivity.class.getSimpleName();
     FoodViewModel foodViewModel;
     TextView totalOrderAmount;
     EditText addressEditText;
+
+    FirebaseUser currentUser;
+    String userID;
+    String userPhone;
+    double totalAmount = 0;
+
+    Map<String, Integer> orderPairs = new HashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_order);
+
+        currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        userID = currentUser.getUid();
+        userPhone = currentUser.getPhoneNumber();
 
         addressEditText = findViewById(R.id.addressEditText);
         addressEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
@@ -51,8 +71,10 @@ public class PlaceOrderActivity extends AppCompatActivity implements BottomSheet
                 if (foods.size() == 0) finish();
                 double totalAmount = 0;
                 for (int i = 0; i < foods.size(); i++) {
-                    if (foods.get(i).getCount() != 0) {
-                        totalAmount += (foods.get(i).getPrice() * foods.get(i).getCount());
+                    FoodRoom currentFood = foods.get(i);
+                    if (currentFood.getCount() != 0) {
+                        totalAmount += (currentFood.getPrice() * currentFood.getCount());
+                        orderPairs.put(currentFood.getTitle(), currentFood.getCount());
                     }
                 }
                 setAmount(totalAmount);
@@ -62,6 +84,7 @@ public class PlaceOrderActivity extends AppCompatActivity implements BottomSheet
     }
 
     private void setAmount(double totalAmount) {
+        this.totalAmount = totalAmount;
         DecimalFormat df = new DecimalFormat("#.##");
         totalOrderAmount.setText("$" + df.format(totalAmount));
     }
@@ -99,9 +122,39 @@ public class PlaceOrderActivity extends AppCompatActivity implements BottomSheet
 
     @Override
     public void onButtonClicked() {
-        Toast.makeText(this, "Your order placed", Toast.LENGTH_SHORT).show();
-        foodViewModel.resetAllOrders();
-
-        finish();
+        if (InternetConnection.checkConnection(this)) {
+            addOrderToFirebase();
+            Toast.makeText(this, "Your order placed", Toast.LENGTH_SHORT).show();
+            foodViewModel.resetAllOrders();
+            finish();
+        } else {
+            Toast.makeText(this, "You need internet to complete order!", Toast.LENGTH_LONG).show();
+        }
     }
+
+    private void addOrderToFirebase() {
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+
+        String key = database.getReference().child("orders").push().getKey();
+
+        DatabaseReference userRef = database.getReference("users/" + userID + "/orders/" + key);
+        DatabaseReference orderRef = database.getReference("orders/" + key);
+
+        userRef.setValue(getOrderObject());
+        orderRef.setValue(getOrderObject());
+    }
+
+    private FirebaseOrder getOrderObject() {
+        return new FirebaseOrder(
+                userID,
+                userPhone,
+                addressEditText.getText().toString(),
+                "received",
+                totalAmount,
+                System.currentTimeMillis() / 1000L,
+                orderPairs);
+
+    }
+
+
 }
