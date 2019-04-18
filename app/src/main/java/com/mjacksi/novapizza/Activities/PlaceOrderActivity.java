@@ -16,7 +16,7 @@ import com.mjacksi.novapizza.Models.FirebaseOrder;
 import com.mjacksi.novapizza.R;
 import com.mjacksi.novapizza.RoomDatabase.FoodRoom;
 import com.mjacksi.novapizza.RoomDatabase.FoodViewModel;
-import com.mjacksi.novapizza.Util.InternetConnection;
+import com.mjacksi.novapizza.Utilises.InternetConnection;
 
 import java.text.DecimalFormat;
 import java.util.HashMap;
@@ -140,16 +140,18 @@ public class PlaceOrderActivity extends AppCompatActivity implements BottomSheet
         DatabaseReference userRef = database.getReference("users/" + userID + "/orders/" + key);
         DatabaseReference orderRef = database.getReference("orders/" + key);
 
-        userRef.setValue(getOrderObject());
-        orderRef.setValue(getOrderObject());
+        FirebaseOrder order = getOrderObject(key);
+        userRef.setValue(order);
+        orderRef.setValue(order);
     }
 
-    private FirebaseOrder getOrderObject() {
+    private FirebaseOrder getOrderObject(String key) {
         return new FirebaseOrder(
                 userID,
+                key,
                 userPhone,
                 addressEditText.getText().toString(),
-                "received",
+                "waiting",
                 totalAmount,
                 System.currentTimeMillis() / 1000L,
                 orderPairs);

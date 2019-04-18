@@ -1,4 +1,4 @@
-package com.mjacksi.novapizza.Util;
+package com.mjacksi.novapizza.Utilises;
 
 public class Utilises {
     public static String getTime(long receivedTime) {

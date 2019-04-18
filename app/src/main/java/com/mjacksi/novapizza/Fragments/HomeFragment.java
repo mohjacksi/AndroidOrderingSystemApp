@@ -9,8 +9,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import com.mjacksi.novapizza.Adapters.FoodRecyclerViewAdapter;
 import com.mjacksi.novapizza.R;
-import com.mjacksi.novapizza.RecyclerView.FoodRecyclerViewAdapter;
 import com.mjacksi.novapizza.RoomDatabase.FoodRoom;
 import com.mjacksi.novapizza.RoomDatabase.FoodViewModel;
 

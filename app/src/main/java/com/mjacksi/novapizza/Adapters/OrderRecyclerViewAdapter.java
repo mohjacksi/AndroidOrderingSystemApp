@@ -1,4 +1,4 @@
-package com.mjacksi.novapizza.RecyclerView;
+package com.mjacksi.novapizza.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecyclerViewAdapter.FoodViewHolder>{

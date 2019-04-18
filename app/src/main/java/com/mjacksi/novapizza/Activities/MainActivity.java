@@ -78,6 +78,8 @@ public class MainActivity extends AppCompatActivity
                     new HomeFragment()).commit();
             navigationView.setCheckedItem(R.id.nav_home);
         }
+
+
         foodViewModel = ViewModelProviders.of(this).get(FoodViewModel.class);
         foodViewModel.getCount().observe(MainActivity.this, new Observer<Integer>() {
             @Override

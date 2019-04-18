@@ -1,11 +1,6 @@
-package com.mjacksi.novapizza.RecyclerView;
+package com.mjacksi.novapizza.Adapters;
 
 import android.content.Context;
-
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +15,10 @@ import com.mjacksi.novapizza.RoomDatabase.FoodRoom;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerViewAdapter.FoodViewHolder> {
     List<FoodRoom> foodList = new ArrayList<>();
@@ -127,13 +126,11 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
     }
 
 
-    public interface OnItemClickListener {
-        void onItemClick(FoodRoom food, int position);
-
-    }
-
     public void setOnItemClickListener(OnItemClickListener listener) {
         this.listener = listener;
+    }
+    public interface OnItemClickListener {
+        void onItemClick(FoodRoom food, int position);
     }
 
 }

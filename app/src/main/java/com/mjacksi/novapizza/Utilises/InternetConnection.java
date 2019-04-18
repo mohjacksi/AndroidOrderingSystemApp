@@ -1,4 +1,4 @@
-package com.mjacksi.novapizza.Util;
+package com.mjacksi.novapizza.Utilises;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

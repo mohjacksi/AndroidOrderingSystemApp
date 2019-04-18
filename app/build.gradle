@@ -45,9 +45,13 @@ dependencies {
     //Firebase
     implementation 'com.google.firebase:firebase-core:16.0.8'
     implementation 'com.google.firebase:firebase-auth:16.2.1'
-    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
     implementation 'com.google.firebase:firebase-database:16.1.0'
-    implementation 'org.jetbrains:annotations-java5:15.0'
+    //UI Firebase Auth library
+    implementation 'com.firebaseui:firebase-ui-auth:4.3.1'
+
+
+    // Custom FAB
+    implementation 'com.robertlevonyan.view:CustomFloatingActionButton:2.1.1'
 
 }
 

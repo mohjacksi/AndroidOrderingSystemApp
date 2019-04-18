@@ -13,9 +13,9 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.mjacksi.novapizza.Adapters.FoodRecyclerViewAdapter;
+import com.mjacksi.novapizza.Adapters.OrderRecyclerViewAdapter;
 import com.mjacksi.novapizza.R;
-import com.mjacksi.novapizza.RecyclerView.FoodRecyclerViewAdapter;
-import com.mjacksi.novapizza.RecyclerView.OrderRecyclerViewAdapter;
 import com.mjacksi.novapizza.RoomDatabase.FoodRoom;
 import com.mjacksi.novapizza.RoomDatabase.FoodViewModel;
 

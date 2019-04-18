@@ -13,9 +13,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.mjacksi.novapizza.Adapters.OrdersAdapter;
 import com.mjacksi.novapizza.Models.FirebaseOrder;
 import com.mjacksi.novapizza.R;
-import com.mjacksi.novapizza.RecyclerView.OrdersAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -50,9 +50,9 @@ public class MyOrdersFragment extends Fragment {
 
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         final FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("users/" + currentUser.getUid() + "/orders");
+        DatabaseReference myRef = database.getReference(getString(R.string.firebase_users_slash) + currentUser.getUid() + getString(R.string.firebase_slash_orders));
 
-        myRef.orderByChild("time").addValueEventListener(new ValueEventListener() {
+        myRef.orderByChild(getString(R.string.firebase_time)).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 

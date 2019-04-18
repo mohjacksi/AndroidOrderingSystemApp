@@ -6,6 +6,7 @@ import java.util.Map;
 public class FirebaseOrder {
     public Map<String, Integer> orders;
     String userId;
+    String orderId;
     String userPhone;
     String location;
     String status;
@@ -15,14 +16,23 @@ public class FirebaseOrder {
     public FirebaseOrder() {
     }
 
-    public FirebaseOrder(String userId, String userPhone, String location, String status, double total, long time, Map<String, Integer> orders) {
+    public FirebaseOrder(String userId, String orderId, String userPhone, String location, String status, double total, long time, Map<String, Integer> orders) {
+        this.orders = orders;
         this.userId = userId;
+        this.orderId = orderId;
         this.userPhone = userPhone;
         this.location = location;
         this.status = status;
         this.total = total;
         this.time = time;
-        this.orders = orders;
+    }
+
+    public String getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(String orderId) {
+        this.orderId = orderId;
     }
 
     public long getTime() {
@@ -80,8 +90,5 @@ public class FirebaseOrder {
     public void setTotal(double total) {
         this.total = total;
     }
-
-
-
 
 }

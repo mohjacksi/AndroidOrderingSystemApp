@@ -1,4 +1,4 @@
-package com.mjacksi.novapizza.RecyclerView;
+package com.mjacksi.novapizza.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.mjacksi.novapizza.Models.FirebaseOrder;
 import com.mjacksi.novapizza.R;
-import com.mjacksi.novapizza.Util.Utilises;
+import com.mjacksi.novapizza.Utilises.Utilises;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -58,7 +58,8 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
         DecimalFormat df = new DecimalFormat("#.##");
 
         holder.total.setText("$" + df.format(currentOrder.getTotal()));
-        holder.status.setText(currentOrder.getStatus());
+        String status = currentOrder.getStatus().replace("_", " ");
+        holder.status.setText(status.substring(0, 1).toUpperCase() + status.substring(1).toLowerCase());
     }
 
     @Override
