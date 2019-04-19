@@ -18,9 +18,7 @@
         <activity
             android:name=".Activities.PlaceOrderActivity"
             android:label="Place order!"
-            android:theme="@style/AppTheme.NoActionBar"
-
-            android:windowSoftInputMode="adjustResize" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".Activities.OrderActivity"
             android:label="Review order"
