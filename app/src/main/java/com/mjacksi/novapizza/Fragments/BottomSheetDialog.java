@@ -8,16 +8,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.mjacksi.novapizza.R;
 
-import androidx.annotation.Nullable;
-
+/**
+ * Bottom sheet dialog, shows to user as a confirm order message
+ */
 public class BottomSheetDialog extends BottomSheetDialogFragment {
 
     SheetListener listener;
 
     public BottomSheetDialog() {
+        // Required empty public constructor
     }
 
     @Nullable

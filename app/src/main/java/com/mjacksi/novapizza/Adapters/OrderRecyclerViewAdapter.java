@@ -9,6 +9,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.mjacksi.novapizza.Activities.OrderActivity;
 import com.mjacksi.novapizza.Models.Food;
 import com.mjacksi.novapizza.R;
 import com.mjacksi.novapizza.RoomDatabase.FoodRoom;
@@ -16,9 +20,10 @@ import com.mjacksi.novapizza.RoomDatabase.FoodRoom;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.recyclerview.widget.RecyclerView;
-
+/**
+ * The adapter for @{@link OrderActivity}
+ * Display all items selected by user
+ */
 public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecyclerViewAdapter.FoodViewHolder>{
     List<FoodRoom> foodList = new ArrayList<>();
     List<Food> cloneFoodList = new ArrayList<>();
@@ -28,10 +33,20 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
     private FoodRecyclerViewAdapter.OnItemClickListener listenerDec;
 
 
+    /**
+     * Get the context from constructor
+     *
+     * @param context the context of activity that use this adapter
+     */
     public OrderRecyclerViewAdapter(Context context) {
         this.context = context;
     }
 
+    /**
+     * Make ViewHolder for recycler view
+     * Invoke that times of the items can fill the screen
+     * @return view holder
+     */
     @NonNull
     @Override
     public OrderRecyclerViewAdapter.FoodViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -44,6 +59,11 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
         return holder;
     }
 
+    /**
+     * Binding the data from our database with our limited view holders
+     * @param holder view holder in this position
+     * @param i position
+     */
     @Override
     public void onBindViewHolder(@NonNull OrderRecyclerViewAdapter.FoodViewHolder holder, int i) {
         FoodRoom currentFood = foodList.get(i);
@@ -54,6 +74,76 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
 
     }
 
+    /**
+     * Clone the old list view (class attribute one) with the new one came after changes
+     *
+     * @param newFoodList
+     */
+    void cloneList(List<FoodRoom> newFoodList) {
+        cloneFoodList.clear();
+        for (int i = 0; i < newFoodList.size(); i++) {
+            FoodRoom current = newFoodList.get(i);
+            cloneFoodList.add(new Food(current.getCount()));
+        }
+    }
+
+
+    @Override
+    public int getItemCount() {
+        return foodList.size();
+    }
+
+    /**
+     * Check the difference between the old and new list of items
+     * to make the animation on list view in the appropriate position
+     */
+    void checkDiff() {
+        if (cloneFoodList.size() == foodList.size()) {
+            for (int i = 0; i < cloneFoodList.size(); i++) {
+                if (cloneFoodList.get(i).getCount() != foodList.get(i).getCount()) {
+                    notifyItemChanged(i);
+                }
+            }
+        } else {
+            notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * To update the adapter from outside with new list of items
+     *
+     * @param newFoodRooms
+     */
+    public void newFoodRooms(List<FoodRoom> newFoodRooms) {
+        this.foodList = newFoodRooms;
+        checkDiff();
+        cloneList(newFoodRooms);
+    }
+
+    /**
+     * This interface will implemented
+     * by the activity who implements
+     * this recycler view adapter
+     * to listen for click event
+     */
+    public void setOnItemClickListenerInc(FoodRecyclerViewAdapter.OnItemClickListener listener) {
+        this.listenerInc = listener;
+    }
+
+    /**
+     * This interface will implemented
+     * by the activity who implements
+     * this recycler view adapter
+     * to listen for click event
+     */
+    public void setOnItemClickListenerDec(FoodRecyclerViewAdapter.OnItemClickListener listener) {
+        this.listenerDec = listener;
+    }
+
+    /**
+     * Holder class that defined all widgets inside
+     * the view holder for this recycler view
+     */
     public class FoodViewHolder extends RecyclerView.ViewHolder {
         LinearLayout linearLayout;
         TextView name, price, total;
@@ -94,66 +184,7 @@ public class OrderRecyclerViewAdapter extends RecyclerView.Adapter<OrderRecycler
                     }
                 }
             });
-
-
-
-//            button.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    int position = getAdapterPosition();
-//                    if (listener != null && position != RecyclerView.NO_POSITION) {
-//                        listener.onItemClick(foodList.get(position), position);
-//                    }
-//                }
-//            });
         }
-    }
-
-
-    @Override
-    public int getItemCount() {
-        return foodList.size();
-    }
-
-
-    void cloneList(List<FoodRoom> newFoodList){
-        cloneFoodList.clear();
-        for (int i = 0; i < newFoodList.size() ; i++) {
-            FoodRoom current = newFoodList.get(i);
-            cloneFoodList.add(new Food(current.getCount()));
-        }
-    }
-
-    void checkDiff(){
-        if(cloneFoodList.size() == foodList.size()){
-            for (int i = 0; i < cloneFoodList.size(); i++) {
-                if (cloneFoodList.get(i).getCount() != foodList.get(i).getCount()){
-                    notifyItemChanged(i);
-                }
-            }
-        }else{
-            notifyDataSetChanged();
-        }
-    }
-
-    public void changeAt(List<FoodRoom> newFoodRooms) {
-//        if (cloneFoodList.size() == 0)
-//            notifyDataSetChanged();
-        this.foodList = newFoodRooms;
-        checkDiff();
-        cloneList(newFoodRooms);
-    }
-
-
-    public interface OnItemClickListener {
-        void onItemClick(FoodRoom food, int position);
-    }
-
-    public void setOnItemClickListenerInc(FoodRecyclerViewAdapter.OnItemClickListener listener) {
-        this.listenerInc = listener;
-    }
-    public void setOnItemClickListenerDec(FoodRecyclerViewAdapter.OnItemClickListener listener) {
-        this.listenerDec = listener;
     }
 
 }

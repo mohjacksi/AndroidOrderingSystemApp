@@ -1,15 +1,19 @@
 package com.mjacksi.novapizza.RoomDatabase;
 
 import androidx.lifecycle.LiveData;
-
-import java.util.List;
-
 import androidx.room.Dao;
 import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.Query;
 import androidx.room.Update;
 
+import java.util.List;
+
+/**
+ * 2- Dao (Data Access Objects)
+ * is the main classes where you define your database interactions.
+ * like: insert, update, delete, and raw SQL
+ */
 @Dao
 public interface FoodDao {
     @Insert

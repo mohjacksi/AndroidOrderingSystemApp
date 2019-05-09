@@ -13,4 +13,11 @@
     <color name="card_bg_ordered">#FFF6EA</color>
     <color name="card_bg_unordered">#fff</color>
     <color name="button_text_order">#fff</color>
+
+
+    <color name="intro_bg_1">#4DD0E1</color>
+    <color name="intro_bg_2">#81C784</color>
+    <color name="intro_bg_3">#7CB342</color>
+    <color name="intro_bg_4">#039BE5</color>
+
 </resources>

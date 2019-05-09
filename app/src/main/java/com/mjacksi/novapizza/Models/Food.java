@@ -1,5 +1,8 @@
 package com.mjacksi.novapizza.Models;
 
+/**
+ * @author Mohammed Jacksi
+ */
 public class Food {
     String title;
     String description;
@@ -39,6 +42,7 @@ public class Food {
     public void increaseCount() {
         this.count++;
     }
+
     public void decreaseCount() {
         if(this.count > 0)
             this.count--;

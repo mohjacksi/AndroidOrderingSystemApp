@@ -9,6 +9,13 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.mjacksi.novapizza.Adapters.FoodRecyclerViewAdapter;
 import com.mjacksi.novapizza.R;
 import com.mjacksi.novapizza.RoomDatabase.FoodRoom;
@@ -17,15 +24,8 @@ import com.mjacksi.novapizza.RoomDatabase.FoodViewModel;
 import java.text.DecimalFormat;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 /**
- * A simple {@link Fragment} subclass.
+ * Fragment where the items appear to user to choose one of them
  */
 public class HomeFragment extends Fragment {
     FoodViewModel foodViewModel;
@@ -52,12 +52,11 @@ public class HomeFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-
         foodViewModel = ViewModelProviders.of(HomeFragment.this).get(FoodViewModel.class);
         foodViewModel.getAllFood().observe(HomeFragment.this, new Observer<List<FoodRoom>>() {
             @Override
             public void onChanged(@Nullable List<FoodRoom> foods) {
-                adapter.changeAt(foods);
+                adapter.setNewList(foods);
 
                 double totalAmount = 0;
                 for (int i = 0; i < foods.size(); i++) {
@@ -68,9 +67,6 @@ public class HomeFragment extends Fragment {
                 setAmount(totalAmount);
             }
         });
-
-
-
 
         adapter.setOnItemClickListener(new FoodRecyclerViewAdapter.OnItemClickListener() {
             @Override
@@ -87,7 +83,6 @@ public class HomeFragment extends Fragment {
         });
 
         amountTextView = v.findViewById(R.id.text_view_amount);
-
         amountTextView.setVisibility(View.GONE);
         fadeInAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_in_animation);
         fadeOutAndroidAnimation = AnimationUtils.loadAnimation(getActivity(), R.anim.fade_out_animation);
@@ -96,6 +91,11 @@ public class HomeFragment extends Fragment {
         return v;
     }
 
+    /**
+     * Set the total amount on bottom of fragment
+     *
+     * @param totalAmount the total amount of selected items
+     */
     private void setAmount(double totalAmount) {
         DecimalFormat df = new DecimalFormat("#.##");
         if(totalAmount == 0){

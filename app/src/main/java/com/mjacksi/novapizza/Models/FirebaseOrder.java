@@ -3,6 +3,11 @@ package com.mjacksi.novapizza.Models;
 
 import java.util.Map;
 
+/**
+ * @author Mohammed Jacksi
+ * Firebas helper object
+ * helps to upload food order node to firebase database
+ */
 public class FirebaseOrder {
     public Map<String, Integer> orders;
     String userId;

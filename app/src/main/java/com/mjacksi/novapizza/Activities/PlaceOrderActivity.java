@@ -7,6 +7,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -23,12 +29,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-
 public class PlaceOrderActivity extends AppCompatActivity implements BottomSheetDialog.SheetListener {
 
     private static final String CLASS_TAG = PlaceOrderActivity.class.getSimpleName();
@@ -43,6 +43,9 @@ public class PlaceOrderActivity extends AppCompatActivity implements BottomSheet
 
     Map<String, Integer> orderPairs = new HashMap<>();
 
+    /**
+     * Get user information with order information and send the order to the server (Firebase readtime database)
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,20 +86,27 @@ public class PlaceOrderActivity extends AppCompatActivity implements BottomSheet
 
     }
 
+    /**
+     * Format the price amount from double to string
+     *
+     * @param totalAmount will return as "Total amount: $*.**"
+     */
     private void setAmount(double totalAmount) {
         this.totalAmount = totalAmount;
         DecimalFormat df = new DecimalFormat("#.##");
         totalOrderAmount.setText("$" + df.format(totalAmount));
     }
 
+    /**
+     * Setup toolbar of the activity
+     * to add back button in toolbar
+     */
     private void toolbarSetup() {
         Toolbar toolbar = findViewById(R.id.place_order_toolbar);
         toolbar.setTitle("Place order");
         setSupportActionBar(toolbar);
-
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowHomeEnabled(true);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -105,6 +115,10 @@ public class PlaceOrderActivity extends AppCompatActivity implements BottomSheet
         });
     }
 
+    /**
+     * Make order button
+     * @param view the button clicked
+     */
     public void orderNow(View view) {
         String address = addressEditText.getText().toString();
         if (!address.trim().isEmpty()) {
@@ -116,10 +130,13 @@ public class PlaceOrderActivity extends AppCompatActivity implements BottomSheet
             bottomSheet.setArguments(bundle);
             bottomSheet.show(getSupportFragmentManager(), "BottomSheetTag");
         } else {
-            Toast.makeText(this, "Plase enter your address", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "Please enter your address", Toast.LENGTH_LONG).show();
         }
     }
 
+    /**
+     * Implemented method from "BottomSheetDialog.SheetListener" interface to handle confirm button order
+     */
     @Override
     public void onButtonClicked() {
         if (InternetConnection.checkConnection(this)) {
@@ -132,6 +149,9 @@ public class PlaceOrderActivity extends AppCompatActivity implements BottomSheet
         }
     }
 
+    /**
+     * Add the order inside the "users" node and in "orders" node
+     */
     private void addOrderToFirebase() {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
@@ -145,6 +165,11 @@ public class PlaceOrderActivity extends AppCompatActivity implements BottomSheet
         orderRef.setValue(order);
     }
 
+    /**
+     * Create order object to upload it to firebase
+     * @param key the special key for each order
+     * @return
+     */
     private FirebaseOrder getOrderObject(String key) {
         return new FirebaseOrder(
                 userID,

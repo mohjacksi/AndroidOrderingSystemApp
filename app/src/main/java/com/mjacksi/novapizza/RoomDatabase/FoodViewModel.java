@@ -2,13 +2,15 @@ package com.mjacksi.novapizza.RoomDatabase;
 
 import android.app.Application;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import androidx.annotation.NonNull;
-
+/**
+ * 5-The ViewModel works as a gateway between the UI controller and the repository
+ */
 public class FoodViewModel extends AndroidViewModel {
     private FoodRepository repository;
     private LiveData<List<FoodRoom>> allFood;

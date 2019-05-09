@@ -12,6 +12,10 @@
             android:id="@+id/nav_orders"
             android:icon="@drawable/ic_shopping_cart"
             android:title="My orders" />
+        <item
+            android:id="@+id/nav_terms"
+            android:icon="@drawable/ic_terms"
+            android:title="Terms" />
     </group>
 
     <item android:title="Communicate">

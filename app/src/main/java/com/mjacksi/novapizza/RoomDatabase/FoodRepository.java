@@ -1,18 +1,25 @@
 package com.mjacksi.novapizza.RoomDatabase;
 
 import android.app.Application;
-import androidx.lifecycle.LiveData;
 import android.os.AsyncTask;
+
+import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
+/**
+ * 4-A class that you create for managing multiple data sources.
+ * In addition to a Room database, the Repository could manage remote data sources such as a web server.
+ * When {@link FoodViewModel} needs some data, it will provided without caring about where the data came from.
+ */
 public class FoodRepository {
-    
+
     private FoodDao foodDao;
     private LiveData<List<FoodRoom>> allFood;
     private LiveData<List<FoodRoom>> allOrderedFood;
 
     private LiveData<Integer> count;
+
     public FoodRepository(Application application) {
         FoodDatabase database = FoodDatabase.getInstance(application);
         foodDao = database.foodDao();
@@ -125,7 +132,4 @@ public class FoodRepository {
     }
 
 
-
-
-    
 }

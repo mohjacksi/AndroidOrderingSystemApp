@@ -89,7 +89,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="16dp"
-        android:text="Plase enter your right address to delever your order"
+        android:text="Plase enter your right address to deliver your order"
         android:textAlignment="center"
         android:textColor="@color/fui_bgEmail"
         android:textSize="14sp"

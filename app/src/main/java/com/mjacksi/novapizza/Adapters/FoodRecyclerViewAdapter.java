@@ -9,6 +9,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.mjacksi.novapizza.Fragments.HomeFragment;
 import com.mjacksi.novapizza.Models.Food;
 import com.mjacksi.novapizza.R;
 import com.mjacksi.novapizza.RoomDatabase.FoodRoom;
@@ -16,10 +21,10 @@ import com.mjacksi.novapizza.RoomDatabase.FoodRoom;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.annotation.NonNull;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.RecyclerView;
-
+/**
+ * The adapter for @{@link HomeFragment} Home fragment
+ * Display all items to select what user want to eat
+ */
 public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerViewAdapter.FoodViewHolder> {
     List<FoodRoom> foodList = new ArrayList<>();
     List<Food> cloneFoodList = new ArrayList<>();
@@ -28,29 +33,44 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
     private OnItemClickListener listener;
 
 
+    /**
+     * Get the context from constructor
+     *
+     * @param context the context of fragment that use this adapter
+     */
     public FoodRecyclerViewAdapter(Context context) {
         this.context = context;
     }
 
+    /**
+     * Make ViewHolder for recycler view
+     * Invoke that times of the items can fill the screen
+     * @param i position
+     * @return view holder
+     */
     @NonNull
     @Override
     public FoodViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
 
+        // getting the list item for this recycler view
         View itemView = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.food_item, viewGroup, false);
         FoodViewHolder holder = new FoodViewHolder(itemView);
-
-
         return holder;
     }
 
+    /**
+     * Binding the data from our database with our limited view holders
+     * @param holder view holder in this position
+     * @param i position
+     */
     @Override
     public void onBindViewHolder(@NonNull FoodViewHolder holder, int i) {
         FoodRoom currentFood = foodList.get(i);
         holder.name.setText(currentFood.getTitle());
         holder.description.setText(currentFood.getDescription());
         holder.imageView.setImageResource(currentFood.getImage());
-        holder.price.setText("$" + String.valueOf(currentFood.getPrice()));
+        holder.price.setText("$" + currentFood.getPrice());
         if (currentFood.getCount() > 0) { // add order to cart
             holder.linearLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.card_bg_ordered));
             holder.button.setText("Delete order");
@@ -64,12 +84,81 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
         }
     }
 
+    /**
+     * Clone the old list view (class attribute one) with the new one came after changes
+     *
+     * @param newFoodList
+     */
+    private void cloneList(List<FoodRoom> newFoodList) {
+        cloneFoodList.clear();
+        for (int i = 0; i < newFoodList.size(); i++) {
+            FoodRoom current = newFoodList.get(i);
+            cloneFoodList.add(new Food(current.getCount()));
+        }
+    }
+
+
+    @Override
+    public int getItemCount() {
+        return foodList.size();
+    }
+
+    /**
+     * Check the difference between the old and new list of items
+     * to make the animation on list view in the appropriate position
+     */
+    private void checkDiff() {
+        if (cloneFoodList.size() == foodList.size()) {
+            for (int i = 0; i < cloneFoodList.size(); i++) {
+                if (cloneFoodList.get(i).getCount() != foodList.get(i).getCount()) {
+                    notifyItemChanged(i);
+                }
+            }
+        } else {
+            notifyDataSetChanged();
+        }
+    }
+
+    /**
+     * To update the adapter from outside with new list of items
+     *
+     * @param newFoodRooms
+     */
+    public void setNewList(List<FoodRoom> newFoodRooms) {
+        this.foodList = newFoodRooms;
+        checkDiff();
+        cloneList(newFoodRooms);
+    }
+
+    /**
+     * To set listener on cell in recycler view
+     *
+     * @param listener
+     */
+    public void setOnItemClickListener(OnItemClickListener listener) {
+        this.listener = listener;
+    }
+
+
+    /**
+     * This interface will implemented
+     * by the activity who implements
+     * this recycler view adapter
+     * to listen for click event
+     */
+    public interface OnItemClickListener {
+        void onItemClick(FoodRoom food, int position);
+    }
+
+    /**
+     * Holder class that defined all widgets inside
+     * the view holder for this recycler view
+     */
     public class FoodViewHolder extends RecyclerView.ViewHolder {
         LinearLayout linearLayout;
         TextView name, description, price;
         ImageView imageView;
         Button button;
-
 
         public FoodViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -90,47 +179,6 @@ public class FoodRecyclerViewAdapter extends RecyclerView.Adapter<FoodRecyclerVi
                 }
             });
         }
-    }
-
-
-    @Override
-    public int getItemCount() {
-        return foodList.size();
-    }
-
-
-    void cloneList(List<FoodRoom> newFoodList){
-        cloneFoodList.clear();
-        for (int i = 0; i < newFoodList.size() ; i++) {
-            FoodRoom current = newFoodList.get(i);
-            cloneFoodList.add(new Food(current.getCount()));
-        }
-    }
-
-    void checkDiff(){
-        if(cloneFoodList.size() == foodList.size()){
-            for (int i = 0; i < cloneFoodList.size(); i++) {
-                if (cloneFoodList.get(i).getCount() != foodList.get(i).getCount()){
-                    notifyItemChanged(i);
-                }
-            }
-        }else{
-            notifyDataSetChanged();
-        }
-    }
-
-    public void changeAt(List<FoodRoom> newFoodRooms) {
-        this.foodList = newFoodRooms;
-        checkDiff();
-        cloneList(newFoodRooms);
-    }
-
-
-    public void setOnItemClickListener(OnItemClickListener listener) {
-        this.listener = listener;
-    }
-    public interface OnItemClickListener {
-        void onItemClick(FoodRoom food, int position);
     }
 
 }

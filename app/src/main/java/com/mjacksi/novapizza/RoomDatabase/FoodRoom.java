@@ -3,6 +3,9 @@ package com.mjacksi.novapizza.RoomDatabase;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+/**
+ * 1- Food object that will be used as model for room database
+ */
 @Entity(tableName = "food_table")
 public class FoodRoom {
 

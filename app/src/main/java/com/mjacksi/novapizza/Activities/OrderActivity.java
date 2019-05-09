@@ -7,6 +7,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -23,14 +31,9 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+/**
+ * The activity shown when the user select items then clicked on cart button (FAB)
+ */
 public class OrderActivity extends AppCompatActivity {
     private static final String TAG = OrderActivity.class.getSimpleName();
     private static final int RC_SIGN_IN = 333;
@@ -38,7 +41,12 @@ public class OrderActivity extends AppCompatActivity {
     private TextView amountTextView;
     FirebaseAuth firebaseAuth;
     private FloatingActionButton fab;
+    OrderRecyclerViewAdapter adapter;
 
+    /**
+     * Get the items selected from previous activity
+     * Check if the user logged in or not to show the sign-in activity
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +55,7 @@ public class OrderActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         toolbarSetup();
 
-        final OrderRecyclerViewAdapter adapter = new OrderRecyclerViewAdapter(this);
+        adapter = new OrderRecyclerViewAdapter(this);
         RecyclerView recyclerView = findViewById(R.id.order_recyclerview);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -55,11 +63,16 @@ public class OrderActivity extends AppCompatActivity {
 
         foodViewModel = ViewModelProviders.of(this).get(FoodViewModel.class);
         foodViewModel.getAllOrderedFood().observe(this, new Observer<List<FoodRoom>>() {
+            /**
+             * Calculate the total amount after changing in count of ordered item
+             *
+             * @param foods the Room database model
+             */
             @Override
             public void onChanged(@Nullable List<FoodRoom> foods) {
                 if (foods.size() == 0) finish();
 
-                adapter.changeAt(foods);
+                adapter.newFoodRooms(foods);
 
                 double totalAmount = 0;
                 for (int i = 0; i < foods.size(); i++) {
@@ -74,14 +87,20 @@ public class OrderActivity extends AppCompatActivity {
         amountTextView = findViewById(R.id.text_view_order_amount);
 
 
+        /**
+         * On + clicked action to increase the count of ordered item
+         */
         adapter.setOnItemClickListenerInc(new FoodRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(FoodRoom food, int position) {
-                food.setCount(food.getCount()+1);
+                food.setCount(food.getCount() + 1);
                 foodViewModel.update(food);
             }
         });
 
+        /**
+         * On - clicked action to decrease the count of ordered item
+         */
         adapter.setOnItemClickListenerDec(new FoodRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(FoodRoom food, int position) {
@@ -107,6 +126,10 @@ public class OrderActivity extends AppCompatActivity {
 
     }
 
+    /**
+     * Setup toolbar of the activity
+     * to add back button in toolbar
+     */
     private void toolbarSetup() {
         Toolbar toolbar = findViewById(R.id.order_toolbar);
         toolbar.setTitle("Review order");
@@ -123,10 +146,17 @@ public class OrderActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Go to place order activity
+     */
     void placeOrderActivity() {
         Intent intent = new Intent(OrderActivity.this, PlaceOrderActivity.class);
         startActivity(intent);
     }
+
+    /**
+     * Start the pre-built firebase sign-in UI
+     */
 
     void signIn() {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
@@ -142,10 +172,15 @@ public class OrderActivity extends AppCompatActivity {
     }
 
 
+    /**
+     * Format the price amount from double to string
+     * @param totalAmount will return as "Total amount: $*.**"
+     */
     private void setAmount(double totalAmount) {
         DecimalFormat df = new DecimalFormat("#.##");
         amountTextView.setText("Total amount: $" + df.format(totalAmount));
     }
+
 
 
     @Override
@@ -157,22 +192,22 @@ public class OrderActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_reset_all_orders) {
             foodViewModel.resetAllOrders();
             finish();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
 
+    /**
+     * The result come from firebase sign-in UI
+     * @param requestCode request code
+     * @param resultCode result code
+     * @param data the data came from closed activity
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

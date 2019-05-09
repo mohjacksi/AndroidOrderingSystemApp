@@ -1,5 +1,9 @@
 package com.mjacksi.novapizza.Utilises;
 
+/**
+ * @author Mohammed Jacksi
+ * to return time stamp as (before x time)
+ */
 public class Utilises {
     public static String getTime(long receivedTime) {
         long nowTime = System.currentTimeMillis() / 1000L;

@@ -3,14 +3,19 @@ package com.mjacksi.novapizza.RoomDatabase;
 import android.content.Context;
 import android.os.AsyncTask;
 
-import com.mjacksi.novapizza.R;
-
 import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import com.mjacksi.novapizza.R;
+
+/**
+ * 3- Database
+ * Connect the model {@link FoodRoom} with {@link FoodDao} in this class
+ * to initialize the database
+ */
 @Database(entities = {FoodRoom.class}, version = 1, exportSchema = false)
 public abstract class FoodDatabase extends RoomDatabase {
 
@@ -18,6 +23,15 @@ public abstract class FoodDatabase extends RoomDatabase {
 
     public abstract FoodDao foodDao();
 
+    /**
+     * To make sure we just have on instance of our database every time
+     * to save memory and for more efficient
+     * this function has "synchronized" to set only one thread at a time can access this method
+     * for avoiding making more than one object at the same time
+     *
+     * @param context
+     * @return
+     */
     public static synchronized FoodDatabase getInstance(Context context) {
         if (instance == null) {
             instance = Room.databaseBuilder(context.getApplicationContext(),
@@ -37,6 +51,9 @@ public abstract class FoodDatabase extends RoomDatabase {
         }
     };
 
+    /**
+     * Put to initial data to our database
+     */
     private static class PopulateDbAsyncTask extends AsyncTask<Void, Void, Void> {
         private FoodDao foodDao;
 

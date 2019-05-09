@@ -1,11 +1,22 @@
 package com.mjacksi.novapizza.Activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -18,20 +29,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.mjacksi.novapizza.BuildConfig;
 import com.mjacksi.novapizza.Fragments.HomeFragment;
 import com.mjacksi.novapizza.Fragments.MyOrdersFragment;
+import com.mjacksi.novapizza.Fragments.TermsFragment;
 import com.mjacksi.novapizza.R;
 import com.mjacksi.novapizza.RoomDatabase.FoodViewModel;
 
 import java.util.Arrays;
 import java.util.List;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -42,10 +45,26 @@ public class MainActivity extends AppCompatActivity
     FirebaseAuth firebaseAuth;
 
     boolean thereIsOrder = false;
+
+    /**
+     * The first activity in the application
+     * every time the app opend, it's check if the user is open the app for first time to show intro.
+     * <code>FirebaseDatabase.getInstance().setPersistenceEnabled(true);</code> to make data available for user even offline
+     * <p>
+     * Setting the fab action for adding items to cart.
+     * Set the drawer information
+     * <p>
+     * FoodViewModel to listen to data changing to change the appearance of cart-button (FAB)
+     * and the total view, if there is some items selected
+     * FirebaseAuth.getInstance() if the user is sign in, then show logout to user else hide it and show the login
+     * <p>
+     * FoodViewModel to manage database, listen to data changing, select and un-select items to change the appearance of recycler-view
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        showIntro();
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
 
@@ -104,6 +123,9 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
+    /**
+     * Hide drawer if it's open when click back button
+     */
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = findViewById(R.id.drawer_layout);
@@ -114,6 +136,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * Set menu from menu/main.xml
+     * @param menu the menu of activity
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -123,6 +149,10 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Set on click of the menu button (delete all)
+     * @param item pressed item on menu
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
@@ -131,23 +161,25 @@ public class MainActivity extends AppCompatActivity
             foodViewModel.resetAllOrders();
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
+    /**
+     * Set actions of all options in drawer menu
+     */
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-
         if (id == R.id.nav_home) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new HomeFragment()).commit();
         } else if (id == R.id.nav_orders) {
             getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
                     new MyOrdersFragment()).commit();
+        } else if (id == R.id.nav_terms) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new TermsFragment()).commit();
         } else if (id == R.id.nav_share) {
             try {
                 Intent shareIntent = new Intent(Intent.ACTION_SEND);
@@ -171,6 +203,10 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * Update the UI to be suitable with user login state
+     * @param currentUser the user information who logged
+     */
     private void updateLogoutLogout(FirebaseUser currentUser) {
         NavigationView navigationView = findViewById(R.id.nav_view);
 
@@ -191,7 +227,9 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
-
+    /**
+     * Start the pre-built firebase sign-in UI
+     */
     void signIn() {
         List<AuthUI.IdpConfig> providers = Arrays.asList(
                 new AuthUI.IdpConfig.PhoneBuilder().build());
@@ -206,6 +244,12 @@ public class MainActivity extends AppCompatActivity
     }
 
 
+    /**
+     * The result come from firebase sign-in UI
+     * @param requestCode request code
+     * @param resultCode result code
+     * @param data the data came from closed activity
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -224,6 +268,49 @@ public class MainActivity extends AppCompatActivity
                         .setAction("Failed", null).show();
             }
         }
+    }
+
+    /**
+     * Show intro activity if the user is first time open the app
+     */
+    void showIntro() {
+        Thread t = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                //  Initialize SharedPreferences
+                SharedPreferences getPrefs = PreferenceManager
+                        .getDefaultSharedPreferences(getBaseContext());
+
+                //  Create a new boolean and preference and set it to true
+                boolean isFirstStart = getPrefs.getBoolean("firstStart", true);
+
+                //  If the activity has never started before...
+                if (isFirstStart) {
+
+                    //  Launch app intro
+                    final Intent i = new Intent(MainActivity.this, IntroActivity.class);
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            startActivity(i);
+                        }
+                    });
+
+                    //  Make a new preferences editor
+                    SharedPreferences.Editor e = getPrefs.edit();
+
+                    //  Edit preference to make it false because we don't want this to run again
+                    e.putBoolean("firstStart", false);
+
+                    //  Apply changes
+                    e.apply();
+                }
+            }
+        });
+
+        // Start the thread
+        t.start();
     }
 
 }
